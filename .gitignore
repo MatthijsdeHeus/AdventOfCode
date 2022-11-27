@@ -138,3 +138,5 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+2020/1.py
+2020/2.py
