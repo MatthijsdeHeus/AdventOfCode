@@ -16,10 +16,7 @@ def part1(input):
 
         commonLetter = getCommonLetter2Lists(firstComp, secondComp)
 
-        if commonLetter.isupper():
-            counter += string.ascii_uppercase.index(commonLetter) + 27
-        else:
-            counter += string.ascii_lowercase.index(commonLetter) + 1
+        counter += getLetterValue(commonLetter)
 
     return counter
 
@@ -28,6 +25,13 @@ def getCommonLetter2Lists(list1, list2):
     for secondCompItem in list1:
         if secondCompItem in list2:
             return secondCompItem
+
+
+def getLetterValue(letter):
+    if letter.isupper():
+        return string.ascii_uppercase.index(letter) + 27
+    else:
+        return string.ascii_lowercase.index(letter) + 1
 
 
 def part2(input):
@@ -42,10 +46,7 @@ def part2(input):
 
         commonLetter = getCommonLetter3Lists(row1, row2, row3)
 
-        if commonLetter.isupper():
-            counter += string.ascii_uppercase.index(commonLetter) + 27
-        else:
-            counter += string.ascii_lowercase.index(commonLetter) + 1
+        counter += getLetterValue(commonLetter)
 
         index += 3
 
