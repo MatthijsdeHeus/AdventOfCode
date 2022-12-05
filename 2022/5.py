@@ -1,8 +1,9 @@
+import copy
 from Utilities import *
 
 data = GetData(2022, 5)
 
-towers = [
+manualParsedTowers = [
 ["T", "P", "Z", "C", "S", "L", "Q", "N"],
 ["L", "P", "T", "V", "H", "C", "G"],
 ["D", "C", "F", "Z"],
@@ -14,31 +15,40 @@ towers = [
 ["R", "C", "Q", "F", "S", "L", "V"]
 ]
 
-def part1(input):
+tempTowers1 = copy.deepcopy(manualParsedTowers)
+tempTowers2 = copy.deepcopy(manualParsedTowers)
+
+def part1and2(input):
     for line in input:
         if len(list(line)) > 0:
             if list(line)[0] == "m":
                 split = line.split()
-                amount = split[1]
-                fromTower = split[3]
-                toTower = split[5]
 
-                move2(int(fromTower), int(toTower), int(amount))
+                amount = int(split[1])
+                fromTower = int(split[3])
+                toTower = int(split[5])
+
+                fromTower -= 1
+                toTower -= 1
+
+                move(fromTower, toTower, amount, tempTowers1)
+                move2(fromTower, toTower, amount, tempTowers2)
 
     for x in range(9):
-        print(towers[x][-1])
+        print(tempTowers1[x][-1], end="")
 
-def move(fromTower, toTower, amount):
-    fromTower -= 1
-    toTower -= 1
+    print("\n")
 
+    for x in range(9):
+        print(tempTowers2[x][-1], end="")
+
+
+def move(fromTower, toTower, amount, towers):
     for x in range(amount):
         towers[toTower].append(towers[fromTower].pop())
 
-def move2(fromTower, toTower, amount):
-    fromTower -= 1
-    toTower -= 1
 
+def move2(fromTower, toTower, amount, towers):
     temp = []
 
     for x in range(amount):
@@ -48,4 +58,5 @@ def move2(fromTower, toTower, amount):
 
     towers[toTower].extend(temp)
 
-print(part1(data))
+
+part1and2(data)
