@@ -140,3 +140,13 @@ cython_debug/
 
 2020/1.py
 2020/2.py
+
+# Hide input
+2022/Input
+
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
+packages
