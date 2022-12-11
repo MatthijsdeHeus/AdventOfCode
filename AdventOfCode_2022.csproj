@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BigMath, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\BigMath.0.5.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\BigMath.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,8 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="2022\10.cs" />
+    <Compile Include="2022\11.cs" />
     <Compile Include="2022\7.cs" />
     <Compile Include="2022\8.cs" />
+    <Content Include="2022\Input\11_test.txt" />
+    <Content Include="2022\Input\11.txt" />
     <Content Include="2022\Input\10.txt" />
     <Content Include="2022\Input\10_test.txt" />
     <Content Include="2022\Input\8_test.txt" />
@@ -57,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="2022\1.py" />
