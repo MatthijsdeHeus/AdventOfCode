@@ -14,7 +14,7 @@ namespace AdventOfCode_2022
         {
             List<string> input = Program.GetInput(13, useTestInput);
 
-            Part1(input);
+            Part2(input);
 
             Console.ReadKey();
         }
@@ -65,7 +65,37 @@ namespace AdventOfCode_2022
 
         public static void Part2(List<string> input)
         {
+            input.Add("[[2]]");
+            input.Add("[[6]]");
 
+            List<PacketDataList> unordered = new List<PacketDataList>();
+
+            foreach(string line in input)
+            {
+                if(line != "")
+                {
+                    List<PacketData>ListOfPacketData = ParseStringToPacketData(line);
+
+                    PacketDataList packetDataList = new PacketDataList()
+                    {
+                        list = ListOfPacketData,
+                    };
+
+                    unordered.Add(packetDataList);
+                }
+            }
+
+            unordered.Sort();
+
+            foreach (PacketDataList packetDataList in unordered)
+            {
+                Console.WriteLine(GetPacketDataListString(packetDataList));
+            }
+
+            int firstIndex = unordered.FindIndex(x => GetPacketDataListString(x) == "[[2,],]") + 1;
+            int secondIndex = unordered.FindIndex(x => GetPacketDataListString(x) == "[[6,],]") + 1;
+
+            Console.WriteLine($"Answer = {firstIndex * secondIndex}");
         }
 
         public static bool checkPair(List<PacketData> leftPacket, List<PacketData> rightPacket)
@@ -320,10 +350,30 @@ namespace AdventOfCode_2022
     public class PacketDataInt : PacketData
     {
         public int value;
+
     }
 
-    public class PacketDataList : PacketData
+    public class PacketDataList : PacketData, IComparable<PacketDataList>
     {
         public List<PacketData> list = new List<PacketData>();
+
+        public int CompareTo(PacketDataList packet)
+        {
+            var result = Day13.CheckTwoValues(this, packet);
+
+            if (result == null)
+            {
+                return 0;
+            }
+            else if ((bool)result == true)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+
+        }
     }
 }
