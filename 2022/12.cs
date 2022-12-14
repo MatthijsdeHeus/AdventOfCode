@@ -52,7 +52,7 @@ namespace AdventOfCode_2022
 
             bfs.hasVisited.Add((start.col, start.row), true);
 
-            bfs.queue.Enqueue(new Node()
+            bfs.queue.Enqueue(new TreeNode()
             {
                 x = start.col,
                 y = start.row,
@@ -102,7 +102,7 @@ namespace AdventOfCode_2022
 
                         bfs.hasVisited.Add((col, row), true);
 
-                        bfs.queue.Enqueue(new Node()
+                        bfs.queue.Enqueue(new TreeNode()
                         {
                             x = col,
                             y = row,
@@ -126,9 +126,9 @@ namespace AdventOfCode_2022
 
     public class BFS
     {
-        public Queue<Node> queue = new Queue<Node>();
+        public Queue<TreeNode> queue = new Queue<TreeNode>();
 
-        //List<Node> edges = new List<Node>();
+        //List<TreeNode> edges = new List<TreeNode>();
 
         public Dictionary<(int, int), bool> hasVisited = new Dictionary<(int, int), bool>();
 
@@ -139,7 +139,7 @@ namespace AdventOfCode_2022
             grid = inputGrid;
         }
 
-        public void ExploreEdge(Node node)
+        public void ExploreEdge(TreeNode node)
         {
             for(int Dcol = -1; Dcol <= 1; Dcol++)
             {
@@ -161,7 +161,7 @@ namespace AdventOfCode_2022
                                     // Added new node with
                                     //Console.WriteLine("Added new node with coords (" + newCol + ", " + newRow + ")");
 
-                                    Node newNode = new Node()
+                                    TreeNode newNode = new TreeNode()
                                     {
                                         Parent = node,
                                         x = newCol,
@@ -185,7 +185,7 @@ namespace AdventOfCode_2022
         {
             while(queue.Count > 0)
             {
-                Node node = queue.Dequeue();
+                TreeNode node = queue.Dequeue();
 
                 ExploreEdge(node);
 
@@ -194,7 +194,7 @@ namespace AdventOfCode_2022
 
                     int counter = 0;
 
-                    Node currentNode = node;
+                    TreeNode currentNode = node;
                     while(currentNode.Parent != null)
                     {
                         counter++;
@@ -212,12 +212,12 @@ namespace AdventOfCode_2022
         }
     }
 
-    public class Node
+    public class TreeNode
     {
         public int x;
         public int y;
 
-        public Node Parent;
-        public List<Node> Children = new List<Node>();
+        public TreeNode Parent;
+        public List<TreeNode> Children = new List<TreeNode>();
     }
 }

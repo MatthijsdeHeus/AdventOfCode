@@ -11,7 +11,7 @@ namespace AdventOfCode_2022
     {
         static void Main(string[] args)
         {
-            Day13.Run();
+            Day14.Run();
         }
 
         public static List<string> GetInput(int day, bool test)
