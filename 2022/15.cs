@@ -10,32 +10,48 @@ namespace AdventOfCode_2022
     {
         public static bool useTestInput = false;
 
-        public static Dictionary<int, int> rowCount = new Dictionary<int, int>();
+        public static Dictionary<int, List<(int, int)>> rowCheckedList = new Dictionary<int, List<(int, int)>>();
 
         public static int minSearchValue = 0;
 
         public static int maxSearchValue;
 
+        public static int checkRow;
+
         public static void Run()
         {
             List<string> input = Program.GetInput(15, useTestInput);
 
-            Part1(input);
+            Solution(input);
 
             Console.ReadKey();
         }
 
-        public static void Part1(List<string> input)
+        public static void Solution(List<string> input)
         {
             Dictionary<(int, int), string> gridDict = new Dictionary<(int, int), string>();
 
             if(useTestInput)
             {
+                checkRow = 10;
+
+                for(int i = -10; i <= 30; i++)
+                {
+                    rowCheckedList[i] = new List<(int, int)>();
+                }
+
                 maxSearchValue = 20;
             }
             else
             {
-                maxSearchValue = 400000;
+                checkRow = 2000000;
+
+                for (int i = -2_000_000; i <= 10_000_000; i++)
+                {
+                    rowCheckedList[i] = new List<(int, int)>();
+                }
+
+                maxSearchValue = 4_000_000;
             }
 
             foreach (string line in input)
@@ -57,7 +73,7 @@ namespace AdventOfCode_2022
                 int closestbeaconX = int.Parse(closestbeaconcoordx.Split('=')[1]);
                 int closestbeaconY = int.Parse(closestbeaconcoordy.Split('=')[1]);
 
-                markGrid(gridDict, sensorX, sensorY, closestbeaconX, closestbeaconY, minSearchValue, maxSearchValue);
+                markGrid(gridDict, sensorX, sensorY, closestbeaconX, closestbeaconY);
 
                 gridDict[(sensorX, sensorY)] = "S";
                 gridDict[(closestbeaconX, closestbeaconY)] = "B";
@@ -65,75 +81,56 @@ namespace AdventOfCode_2022
                 
             }
 
-            foreach((int x, int y) key in gridDict.Keys)
+            // Part 2
+            for(int y = 0; y < maxSearchValue; y++)
             {
-                if(!gridDict.ContainsKey((key.x + 1, key.y)) && gridDict.ContainsKey((key.x + 2, key.y)))
-                {
-                    if(gridDict[key] == "#")
-                    {
-                        long x = (key.x + 1) * 400000;
+                if(y % 100 == 0)
+                    Console.WriteLine(y / (double)4000000 * 100 + "%");
 
-                        Console.WriteLine(x + key.y);
+                for (int x = 0; x <= maxSearchValue; x++)
+                {
+                    int result = isInsideInterval(x, y);
+
+                    if (result == -1)
+                    {
+                        Console.WriteLine("FOUND x = " + x + " y = " + (y + 1));
+                        Console.WriteLine($"Result = {x * 4000000 + y + 1}");
+                        return;
                     }
-                    
+                    else
+                    {
+                        x = result;
+                    }
+                }
+            }
+        }
+
+        public static int isInsideInterval(int x, int row)
+        {
+            foreach ((int min, int max) interval in rowCheckedList[row + 1])
+            {
+                if (interval.min <= x && x <= interval.max)
+                {
+                    return interval.max;
                 }
             }
 
-            //markGrid(grid, 5 - xMin, 5 - yMin, 5 - xMin , 3 - yMin);
+            return -1;
         }
 
-        public static void markGrid(Dictionary<(int, int), string> gridDict, int sensorX, int sensorY, int closestbeaconX, int closestbeaconY, int minSearchValue, int maxSearchValue)
+        public static void markGrid(Dictionary<(int, int), string> gridDict, int sensorX, int sensorY, int closestbeaconX, int closestbeaconY)
         {
             int range = Math.Abs(closestbeaconX - sensorX) + Math.Abs(closestbeaconY - sensorY);
 
-            for(int y = Math.Max(minSearchValue, sensorY - range); y <= Math.Min(sensorY + range, maxSearchValue); y++)
+            for(int y = sensorY + range; y >= sensorY - range; y--)
             {
-                if (rowCount.ContainsKey(y))
+                int minX = sensorX + Math.Abs(y - sensorY) - range;
+                int maxX = sensorX - 1 * (Math.Abs(y - sensorY) - range);
+
                 {
-                    if(rowCount[y] == maxSearchValue)
-                    {
-                        if(y == maxSearchValue)
-                        {
-                            maxSearchValue--;
-                            Console.WriteLine(maxSearchValue);
-                        } else if(y == minSearchValue)
-                        {
-                            minSearchValue++;
-                        }
-                    }
-                        
-                }
-                else
-                {
-                    rowCount[y] = 0;
-                }
-
-                for (int x = Math.Max(minSearchValue, sensorX - range); x <= Math.Min(maxSearchValue, sensorX + range); x++)
-                {
-                    if (gridDict.ContainsKey((x, y)))
-                        continue;
-
-                    rowCount[y]++;
-                    
-
-
-                    /*if (y < 0 || y > 20)
-                    {
-                        continue;
-                    }*/
-
-                    int dy = Math.Abs(sensorY - y);
-                    int dx = Math.Abs(sensorX - x);
-
-                    if(dy + dx <= range)
-                    {
-                        gridDict[(x, y)] = "#";
-                    }
-
+                    rowCheckedList[y].Add((minX, maxX));
                 }
             }
-            //Console.WriteLine("");
-            //printGrid(gridDict);
         }
 
         public static void printGrid(Dictionary<(int, int), string> gridDict)
@@ -150,15 +147,8 @@ namespace AdventOfCode_2022
                         row += ".";
                     }
                     else if(gridDict[(x, y)] == "#")
-                    {
-                        if (x < 0 || x > 20 || y < 0 || y > 20)
-                        {
-                            row += " ";
-                        }
-                        else
-                        {
-                            row += "#";
-                        }
+                    { 
+                        row += "#";
                     }
                     else if (gridDict[(x, y)] == "B")
                     {
@@ -170,14 +160,14 @@ namespace AdventOfCode_2022
                     }
                     else
                     {
-                        if (x < 0 || x > 20 || y < 0 || y > 0)
+                       /* if (x < 0 || x > 20 || y < 0 || y > 0)
                         {
                             row += " ";
                         }
                         else
                         {
                             row += ".";
-                        }
+                        }*/
                         
                     }
 
@@ -191,5 +181,6 @@ namespace AdventOfCode_2022
 
             Console.WriteLine();
         }
+
     }
 }
