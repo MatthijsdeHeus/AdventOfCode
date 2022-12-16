@@ -48,15 +48,18 @@
   <ItemGroup>
     <Compile Include="2022\10.cs" />
     <Compile Include="2022\11.cs" />
+    <Compile Include="2022\16.cs" />
     <Compile Include="2022\15.cs" />
     <Compile Include="2022\14.cs" />
     <Compile Include="2022\13.cs" />
     <Compile Include="2022\7.cs" />
     <Compile Include="2022\8.cs" />
+    <Content Include="2022\Input\16.txt" />
     <Content Include="2022\Input\15.txt" />
     <Content Include="2022\Input\14.txt" />
     <Content Include="2022\Input\13.txt" />
     <Content Include="2022\Input\12.txt" />
+    <Content Include="2022\Input\16_test.txt" />
     <Content Include="2022\Input\15_test.txt" />
     <Content Include="2022\Input\14_test.txt" />
     <Content Include="2022\Input\13_test.txt" />
