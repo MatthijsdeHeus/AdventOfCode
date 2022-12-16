@@ -16,6 +16,8 @@ namespace AdventOfCode_2022
 
         public static int inputSize;
 
+        public static int amountOfValvesWithFlow = 0;
+
         public static void Run()
         {
             List<string> input = Program.GetInput(16, useTestInput);
@@ -48,6 +50,15 @@ namespace AdventOfCode_2022
                 valveInfo[name] = (int.Parse(flowrate), correctOptions);
             }
 
+            foreach ((int flow, string[]) value in valveInfo.Values)
+            {
+                if(value.flow > 0)
+                {
+                    amountOfValvesWithFlow++;
+                }
+            }
+
+
             foreach (string key in valveInfo.Keys)
             {
                 FillDistanceDictionary2(key);
@@ -67,12 +78,12 @@ namespace AdventOfCode_2022
 
             (List<string> list1, List<string> list2) exampleRoute = (list, elephantList);
 
-            Console.WriteLine(calculateScore2(exampleRoute.list1, exampleRoute.list2));
+            //Console.WriteLine(calculateScore2(exampleRoute.list1, exampleRoute.list2));
 
 
 
             //Console.WriteLine(SearchPart1());
-            //Console.WriteLine(SearchPart2());
+            Console.WriteLine(SearchPart2());
         }
 
         public static void FillDistanceDictionary(string start)
@@ -220,18 +231,12 @@ namespace AdventOfCode_2022
 
             while(queue.Count > 0)
             {
-                if(queue.Count % 10000 == 0)
-                {
-                    Console.WriteLine(queue.Count);
-                }
-                
                 List<string> list = queue.Dequeue();
-                //Console.WriteLine($"Dequeued {string.Join(", ", list)}");
+                Console.WriteLine($"Dequeued {string.Join(", ", list)}");
 
                 // Keys that could be visited
                 List<string> remainingValves = valveInfo.Keys.ToList();
                 remainingValves.RemoveAll(x => list.Contains(x) || valveInfo[x].Item1 == 0);
-
 
                 foreach (string currentvalve in remainingValves)
                 {
@@ -324,59 +329,75 @@ namespace AdventOfCode_2022
         {
             int bestScore = 0;
 
-            Queue<(List<string>, List<string>)> queue = new Queue<(List<string>, List<string>)>();
+            // define the queues
+            Queue<(List<string> humanRoute, List<string> elephantRoute)> Queue = new Queue<(List<string>, List<string>)>();
 
-            List<string> list1 = new List<string>() { "AA" };
-            List<string> list2 = new List<string>() { "AA" };
+            // start node
+            List<string> HumanStart = new List<string>() { "AA" };
+            List<string> ElephantStart = new List<string>() { "AA" };
 
-            (List<string>, List<string>) start = (list1, list2);
+            Queue.Enqueue((HumanStart, ElephantStart));
 
-            queue.Enqueue(start);
 
-            while (queue.Count > 0)
+
+            // main bfs loop
+            while (Queue.Count() > 0)
             {
-                /*if (queue.Count % 100000 == 0)
+                // current routes of human and elephant
+                (List<string> humanRoute, List<string> elephantRoute) = Queue.Dequeue();
+
+                // get a list of all valves with pressure which are not in either route
+                List<string> valvesWithPressureNotInEitherRoute = valveInfo.Keys.ToList();
+                valvesWithPressureNotInEitherRoute.RemoveAll(valveWithMaybePressure => humanRoute.Contains(valveWithMaybePressure) || elephantRoute.Contains(valveWithMaybePressure)  || (valveInfo[valveWithMaybePressure].Item1 == 0));
+
+                // create a route for the human go to every remaining valves
+                foreach (string unvisitedValveForHuman in valvesWithPressureNotInEitherRoute)
                 {
-                    Console.WriteLine(queue.Count);
-                }*/
+                    // Create copy of list of valves visited by the human
+                    List<string> newHumanList = new List<string>();
+                    foreach (string humanClosedValve in humanRoute)
+                    {
+                        newHumanList.Add(humanClosedValve);
+                    }
 
-                (List<string> list1, List<string> list2) list = queue.Dequeue();
+                    // add unvisited valve in the route for the human
+                    newHumanList.Add(unvisitedValveForHuman);
 
-                Console.WriteLine($"Dequeued \n[{string.Join(", ", list.list1)}]\n[{string.Join(", ", list.list2)}] \n");
+                    // create copy of the valvesWithPressureNotInEitherRoute list except for the one added to the human route
+                    List<string> valvesWithNotInEitherRouteNew = valveInfo.Keys.ToList();
+                    valvesWithNotInEitherRouteNew.RemoveAll(valveWithMaybePressure => newHumanList.Contains(valveWithMaybePressure) || elephantRoute.Contains(valveWithMaybePressure) || (valveInfo[valveWithMaybePressure].Item1 == 0));
 
-                // Keys that could be visited
-                List<string> remainingValves = valveInfo.Keys.ToList();
-                remainingValves.RemoveAll(x => list.list1.Contains(x) || list.list2.Contains(x) || valveInfo[x].Item1 == 0);
+                    // loop over them for the elephant
+                    foreach (string unvisitedValveForElephant in valvesWithNotInEitherRouteNew)
+                    {
+                        // Copy old route of elephant
+                        List<string> newElephantList = new List<string>();
+                        foreach (string elephantClosedValve in elephantRoute)
+                        {
+                            newElephantList.Add(elephantClosedValve);
+                        }
 
-                foreach (string currentvalve in remainingValves)
-                {
-                    List<string> newList1 = new List<string>();
+                        // Add the unvisited valve in the route for the elephant
+                        newElephantList.Add(unvisitedValveForElephant);
 
-                    newList1.AddRange(list.list1);
+                        // Check if newly created list is the best yet
+                        int newScore = calculateScore2(newHumanList, newElephantList);
 
-                    newList1.Add(currentvalve);
+                        if (newScore > bestScore)
+                        {
+                            bestScore = newScore;
+                        }
 
-                    int newScore = calculateScore2(newList1, list.list2);
+                        // if either the elephant or human have time left enqueue route again and there are more valves to close
+                        if ((calculateTime(newHumanList) <= 22 || calculateTime(newElephantList) <= 22) && newElephantList.Count + newHumanList.Count - 2 < amountOfValvesWithFlow)
+                        {
+                            Console.WriteLine($"Enqueued \n{string.Join(", ", newHumanList)}\n{string.Join(", ", newElephantList)}");
+                            Console.WriteLine();
+                            Queue.Enqueue((newHumanList, newElephantList));
+                        }
+                            
+                    }
 
-                    if (newScore > bestScore)
-                        bestScore = newScore;
-
-                    if (calculateTime(newList1) <= 24)
-                        queue.Enqueue((newList1, list2));
-
-                    List<string> newList2 = new List<string>();
-
-                    newList2.AddRange(list.list1);
-
-                    newList2.Add(currentvalve);
-
-                    int newScore2 = calculateScore2(list.list1, newList2);
-
-                    if (newScore2 > bestScore)
-                        bestScore = newScore;
-
-                    if (calculateTime(newList2) <= 24)
-                        queue.Enqueue((list1, newList2));
                 }
             }
 
@@ -385,8 +406,6 @@ namespace AdventOfCode_2022
 
         public static int calculateScore2(List<string> route1, List<string> route2)
         {
-            
-
             int totalScore = 0;
 
             int currentTime1 = 0;
@@ -428,9 +447,9 @@ namespace AdventOfCode_2022
 
             List<string> openValves2 = new List<string>();
 
-            for (int i = 0; i < route1.Count(); i++)
+            for (int i = 0; i < route2.Count(); i++)
             {
-                if (i > 0)
+                if (i > 0 && route2.Count() >= 2)
                 {
                     string from = route2[i - 1];
                     string to = route2[i];
