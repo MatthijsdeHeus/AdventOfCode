@@ -8,7 +8,7 @@ namespace AdventOfCode_2022
 {
     public static class Day16
     {
-        public static bool useTestInput = true;
+        public static bool useTestInput = false;
 
         public static Dictionary<string, (int, string[])> valveInfo = new Dictionary<string, (int, string[])>();
 
@@ -205,8 +205,6 @@ namespace AdventOfCode_2022
 
             Queue<List<string>> queue = new Queue<List<string>>();
 
-            Dictionary<List<string>, bool> visited = new Dictionary<List<string>, bool>();
-
             List<string> start = new List<string>();
 
             start.Add("AA");
@@ -221,34 +219,28 @@ namespace AdventOfCode_2022
                 }
                 
                 List<string> list = queue.Dequeue();
+                //Console.WriteLine($"Dequeued {string.Join(", ", list)}");
 
                 // Keys that could be visited
                 List<string> remainingValves = valveInfo.Keys.ToList();
                 remainingValves.RemoveAll(x => list.Contains(x) || valveInfo[x].Item1 == 0);
 
-                if(remainingValves.Count == 0)
+
+                foreach (string currentvalve in remainingValves)
                 {
-                    int newScore = calculateScore(list);
-                    if(newScore > bestScore)
+                    List<string> newList = new List<string>();
+
+                    newList.AddRange(list);
+
+                    newList.Add(currentvalve);
+
+                    int newScore = calculateScore(newList);
+
+                    if (newScore > bestScore)
                         bestScore = newScore;
-                }
-                else
-                {
-                    foreach (string currentvalve in remainingValves)
-                    {
-                        List<string> newList = new List<string>();
 
-                        newList.AddRange(list);
-
-                        newList.Add(currentvalve);
-
-                        if (!visited.ContainsKey(newList))
-                        {
-                            queue.Enqueue(newList);
-
-                            visited.Add(newList, true);
-                        }
-                    }
+                    if(calculateTime(newList) <= 28)
+                        queue.Enqueue(newList);
                 }
             }
 
@@ -295,6 +287,30 @@ namespace AdventOfCode_2022
             }
 
             return totalScore;
+        }
+
+        public static int calculateTime(List<string> route)
+        {
+            int currentTime = 0;
+
+            for (int i = 0; i < route.Count(); i++)
+            {
+                if (i > 0)
+                {
+                    string from = route[i - 1];
+                    string to = route[i];
+
+                    currentTime += valveDistance[(from, to)];
+
+                    // Open valve
+                    if (valveInfo[to].Item1 > 0)
+                    {
+                        currentTime++;
+                    }
+                }
+            }
+
+            return currentTime;
         }
     }
 
