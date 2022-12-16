@@ -8,7 +8,7 @@ namespace AdventOfCode_2022
 {
     public static class Day16
     {
-        public static bool useTestInput = false;
+        public static bool useTestInput = true;
 
         public static Dictionary<string, (int, string[])> valveInfo = new Dictionary<string, (int, string[])>();
 
@@ -43,8 +43,6 @@ namespace AdventOfCode_2022
                 for (int i = 0; i < options.Length; i++)
                 {
                     correctOptions[i] = options[i].TrimEnd(',');
-                    //valveDistance[(name, correctOptions[i])] = 1;
-                    //Console.WriteLine($"Added distance {1} from {name} to {correctOptions[i]}");
                 }
 
                 valveInfo[name] = (int.Parse(flowrate), correctOptions);
@@ -55,17 +53,26 @@ namespace AdventOfCode_2022
                 FillDistanceDictionary2(key);
             }
 
-            Console.WriteLine(valveDistance.Count);
+            List<string> list = new List<string>();
+            list.Add("AA");
+            list.Add("JJ");
+            list.Add("BB");
+            list.Add("CC");
+
+            List<string> elephantList = new List<string>();
+            elephantList.Add("AA");
+            elephantList.Add("DD");
+            elephantList.Add("HH");
+            elephantList.Add("EE");
+
+            (List<string> list1, List<string> list2) exampleRoute = (list, elephantList);
+
+            Console.WriteLine(calculateScore2(exampleRoute.list1, exampleRoute.list2));
 
 
-            //Console.WriteLine(shortestDistanceBetweenTwoPoints("AA", "CC"));
 
-
-            //List<string> routeExample = new List<string>();
-
-            //Console.WriteLine(calculateScore(routeExample));
-
-            Console.WriteLine(Search());
+            //Console.WriteLine(SearchPart1());
+            //Console.WriteLine(SearchPart2());
         }
 
         public static void FillDistanceDictionary(string start)
@@ -199,7 +206,7 @@ namespace AdventOfCode_2022
             return 10000;
         }
 
-        public static int Search()
+        public static int SearchPart1()
         {
             int bestScore = 0;
 
@@ -311,6 +318,148 @@ namespace AdventOfCode_2022
             }
 
             return currentTime;
+        }
+
+        public static int SearchPart2()
+        {
+            int bestScore = 0;
+
+            Queue<(List<string>, List<string>)> queue = new Queue<(List<string>, List<string>)>();
+
+            List<string> list1 = new List<string>() { "AA" };
+            List<string> list2 = new List<string>() { "AA" };
+
+            (List<string>, List<string>) start = (list1, list2);
+
+            queue.Enqueue(start);
+
+            while (queue.Count > 0)
+            {
+                /*if (queue.Count % 100000 == 0)
+                {
+                    Console.WriteLine(queue.Count);
+                }*/
+
+                (List<string> list1, List<string> list2) list = queue.Dequeue();
+
+                Console.WriteLine($"Dequeued \n[{string.Join(", ", list.list1)}]\n[{string.Join(", ", list.list2)}] \n");
+
+                // Keys that could be visited
+                List<string> remainingValves = valveInfo.Keys.ToList();
+                remainingValves.RemoveAll(x => list.list1.Contains(x) || list.list2.Contains(x) || valveInfo[x].Item1 == 0);
+
+                foreach (string currentvalve in remainingValves)
+                {
+                    List<string> newList1 = new List<string>();
+
+                    newList1.AddRange(list.list1);
+
+                    newList1.Add(currentvalve);
+
+                    int newScore = calculateScore2(newList1, list.list2);
+
+                    if (newScore > bestScore)
+                        bestScore = newScore;
+
+                    if (calculateTime(newList1) <= 24)
+                        queue.Enqueue((newList1, list2));
+
+                    List<string> newList2 = new List<string>();
+
+                    newList2.AddRange(list.list1);
+
+                    newList2.Add(currentvalve);
+
+                    int newScore2 = calculateScore2(list.list1, newList2);
+
+                    if (newScore2 > bestScore)
+                        bestScore = newScore;
+
+                    if (calculateTime(newList2) <= 24)
+                        queue.Enqueue((list1, newList2));
+                }
+            }
+
+            return bestScore;
+        }
+
+        public static int calculateScore2(List<string> route1, List<string> route2)
+        {
+            
+
+            int totalScore = 0;
+
+            int currentTime1 = 0;
+
+            List<string> openValves1 = new List<string>();
+
+            for (int i = 0; i < route1.Count(); i++)
+            {
+                if (i > 0)
+                {
+                    string from = route1[i - 1];
+                    string to = route1[i];
+
+                    // Travel time to valve
+                    currentTime1 += valveDistance[(from, to)];
+
+                    //Console.WriteLine($"time = {currentTime}");
+                    //Console.WriteLine($"Move to = {to}");
+
+                    if (currentTime1 >= 26)
+                    {
+                        break;
+                    }
+
+                    // Open valve
+                    if (valveInfo[to].Item1 > 0)
+                    {
+                        currentTime1++;
+                        openValves1.Add(to);
+                        totalScore += (26 - currentTime1) * valveInfo[to].Item1;
+                        //Console.WriteLine($"time = {currentTime}");
+                        //Console.WriteLine($"Opened valve = {to}");
+
+                    }
+                }
+            }
+
+            int currentTime2 = 0;
+
+            List<string> openValves2 = new List<string>();
+
+            for (int i = 0; i < route1.Count(); i++)
+            {
+                if (i > 0)
+                {
+                    string from = route2[i - 1];
+                    string to = route2[i];
+
+                    // Travel time to valve
+                    currentTime2 += valveDistance[(from, to)];
+
+                    //Console.WriteLine($"time = {currentTime}");
+                    //Console.WriteLine($"Move to = {to}");
+
+                    if (currentTime2 >= 26)
+                    {
+                        break;
+                    }
+
+                    // Open valve
+                    if (valveInfo[to].Item1 > 0)
+                    {
+                        currentTime2++;
+                        openValves2.Add(to);
+                        totalScore += (26 - currentTime2) * valveInfo[to].Item1;
+                        //Console.WriteLine($"time = {currentTime}");
+                        //Console.WriteLine($"Opened valve = {to}");
+
+                    }
+                }
+            }
+
+            return totalScore;
         }
     }
 
