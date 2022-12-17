@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,12 +49,15 @@
   <ItemGroup>
     <Compile Include="2022\10.cs" />
     <Compile Include="2022\11.cs" />
+    <Compile Include="2022\17.cs" />
     <Compile Include="2022\16.cs" />
     <Compile Include="2022\15.cs" />
     <Compile Include="2022\14.cs" />
     <Compile Include="2022\13.cs" />
     <Compile Include="2022\7.cs" />
     <Compile Include="2022\8.cs" />
+    <Content Include="2022\Input\17.txt" />
+    <Content Include="2022\Input\17_test.txt" />
     <Content Include="2022\Input\16.txt" />
     <Content Include="2022\Input\15.txt" />
     <Content Include="2022\Input\14.txt" />

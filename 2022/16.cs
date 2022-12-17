@@ -8,7 +8,7 @@ namespace AdventOfCode_2022
 {
     public static class Day16
     {
-        public static bool useTestInput = true;
+        public static bool useTestInput = false;
 
         public static Dictionary<string, (int, string[])> valveInfo = new Dictionary<string, (int, string[])>();
 
@@ -83,7 +83,7 @@ namespace AdventOfCode_2022
 
 
             //Console.WriteLine(SearchPart1());
-            Console.WriteLine(SearchPart2());
+            Console.WriteLine(SearchPart2v2());
         }
 
         public static void FillDistanceDictionary(string start)
@@ -336,9 +336,10 @@ namespace AdventOfCode_2022
             List<string> HumanStart = new List<string>() { "AA" };
             List<string> ElephantStart = new List<string>() { "AA" };
 
+            // List of nodes expanded 
+            Dictionary<string, bool> hasExpanded = new Dictionary<string, bool>();
+
             Queue.Enqueue((HumanStart, ElephantStart));
-
-
 
             // main bfs loop
             while (Queue.Count() > 0)
@@ -386,13 +387,25 @@ namespace AdventOfCode_2022
                         if (newScore > bestScore)
                         {
                             bestScore = newScore;
+                            //Console.WriteLine(bestScore);
+                            //Console.WriteLine($"Best score solution: \n{string.Join(", ", newHumanList)}\n{string.Join(", ", newElephantList)}");
+                            //Console.WriteLine();
                         }
 
                         // if either the elephant or human have time left enqueue route again and there are more valves to close
-                        if ((calculateTime(newHumanList) <= 22 || calculateTime(newElephantList) <= 22) && newElephantList.Count + newHumanList.Count - 2 < amountOfValvesWithFlow)
+
+                        //bool hasExpandedYet = hasExpanded.ContainsKey(createKeyFromLists(newHumanList, newElephantList));
+                        string key1 = createKeyFromLists(newHumanList, newElephantList);
+                        string key2 = createKeyFromLists(newElephantList, newHumanList);
+
+                        if (!hasExpanded.ContainsKey(key1) && !hasExpanded.ContainsKey(key2) && (calculateTime(newHumanList) <= 22 || calculateTime(newElephantList) <= 22) && newElephantList.Count + newHumanList.Count - 2 < amountOfValvesWithFlow)
                         {
                             Console.WriteLine($"Enqueued \n{string.Join(", ", newHumanList)}\n{string.Join(", ", newElephantList)}");
                             Console.WriteLine();
+
+                            hasExpanded.Add(key1, true);
+                            hasExpanded.Add(key2, true);
+
                             Queue.Enqueue((newHumanList, newElephantList));
                         }
                             
@@ -402,6 +415,137 @@ namespace AdventOfCode_2022
             }
 
             return bestScore;
+        }
+
+        public static int SearchPart2v2()
+        {
+            int bestScore = 0;
+
+            // define the queues
+            Queue<(List<string> humanRoute, List<string> elephantRoute)> Queue = new Queue<(List<string>, List<string>)>();
+
+            // start node
+            List<string> HumanStart = new List<string>() { "AA" };
+            List<string> ElephantStart = new List<string>() { "AA" };
+
+            // List of nodes expanded 
+            Dictionary<string, bool> hasExpanded = new Dictionary<string, bool>();
+
+            Queue.Enqueue((HumanStart, ElephantStart));
+
+            // main bfs loop
+            while (Queue.Count() > 0)
+            {
+                // current routes of human and elephant
+                (List<string> humanRoute, List<string> elephantRoute) = Queue.Dequeue();
+
+                // get a list of all valves with pressure which are not in either route
+                List<string> valvesWithPressureNotInEitherRoute = valveInfo.Keys.ToList();
+                valvesWithPressureNotInEitherRoute.RemoveAll(valveWithMaybePressure => humanRoute.Contains(valveWithMaybePressure) || elephantRoute.Contains(valveWithMaybePressure) || (valveInfo[valveWithMaybePressure].Item1 == 0));
+
+                if(humanRoute.Count < elephantRoute.Count)
+                {
+                    // create a route for the human go to every remaining valves
+                    foreach (string unvisitedValveForHuman in valvesWithPressureNotInEitherRoute)
+                    {
+                        // Create copy of list of valves visited by the human
+                        List<string> newHumanList = new List<string>();
+                        foreach (string humanClosedValve in humanRoute)
+                        {
+                            newHumanList.Add(humanClosedValve);
+                        }
+
+                        // add unvisited valve in the route for the human
+                        newHumanList.Add(unvisitedValveForHuman);
+
+                        // Check if newly created list is the best yet
+                        int newScore = calculateScore2(newHumanList, elephantRoute);
+
+                        if (newScore > bestScore)
+                        {
+                            bestScore = newScore;
+                            Console.WriteLine(bestScore);
+                            Console.WriteLine($"Best score solution: \n{string.Join(", ", newHumanList)}\n{string.Join(", ", elephantRoute)}");
+                            Console.WriteLine();
+                        }
+
+                        string key1 = createKeyFromLists(newHumanList, elephantRoute);
+
+                        if (!hasExpanded.ContainsKey(key1) && (calculateTime(newHumanList) <= 22 || calculateTime(elephantRoute) <= 22) && elephantRoute.Count + newHumanList.Count - 2 < amountOfValvesWithFlow)
+                        {
+                            //Console.WriteLine($"Enqueued \n{string.Join(", ", newHumanList)}\n{string.Join(", ", elephantRoute)}");
+                            //Console.WriteLine();
+
+                            hasExpanded.Add(key1, true);
+
+                            Queue.Enqueue((newHumanList, elephantRoute));
+                        }
+                    }
+                }
+                else
+                {
+                    // loop over them for the elephant
+                    foreach (string unvisitedValveForElephant in valvesWithPressureNotInEitherRoute)
+                    {
+                        // Copy old route of elephant
+                        List<string> newElephantList = new List<string>();
+                        foreach (string elephantClosedValve in elephantRoute)
+                        {
+                            newElephantList.Add(elephantClosedValve);
+                        }
+
+                        // Add the unvisited valve in the route for the elephant
+                        newElephantList.Add(unvisitedValveForElephant);
+
+                        // Check if newly created list is the best yet
+                        int newScore = calculateScore2(humanRoute, newElephantList);
+
+                        if (newScore > bestScore)
+                        {
+                            bestScore = newScore;
+                            Console.WriteLine(bestScore);
+                            Console.WriteLine($"Best score solution: \n{string.Join(", ", humanRoute)}\n{string.Join(", ", newElephantList)}");
+                            Console.WriteLine();
+                        }
+
+                        // if either the elephant or human have time left enqueue route again and there are more valves to close
+
+                        //bool hasExpandedYet = hasExpanded.ContainsKey(createKeyFromLists(newHumanList, newElephantList));
+                        string key1 = createKeyFromLists(humanRoute, newElephantList);
+
+                        if (!hasExpanded.ContainsKey(key1) && (calculateTime(humanRoute) <= 22 || calculateTime(newElephantList) <= 22) && newElephantList.Count + humanRoute.Count - 2 < amountOfValvesWithFlow)
+                        {
+                            //Console.WriteLine($"Enqueued \n{string.Join(", ", humanRoute)}\n{string.Join(", ", newElephantList)}");
+                            //Console.WriteLine();
+
+                            hasExpanded.Add(key1, true);
+
+                            Queue.Enqueue((humanRoute, newElephantList));
+                        }
+                    }
+                }
+            }
+
+            return bestScore;
+        }
+
+        public static string createKeyFromLists(List<string> list1, List<string> list2)
+        {
+            string output = "";
+
+            foreach(string valve in list1)
+            {
+                output += valve + ",";
+            }
+
+            output += ";";
+
+            foreach (string valve in list2)
+            {
+                output += valve + ",";
+            }
+
+            return output;
         }
 
         public static int calculateScore2(List<string> route1, List<string> route2)
