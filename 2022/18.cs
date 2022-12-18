@@ -10,9 +10,9 @@ namespace AdventOfCode_2022
     {
         public static void Run()
         {
-            List<string> input = Program.GetInput(18, true);
+            List<string> input = Program.GetInput(18, false);
 
-            Part1(input);
+            Part2(input);
 
             Console.ReadKey();
         }
@@ -279,11 +279,18 @@ namespace AdventOfCode_2022
                                 {
                                     cubeList.AddFirst((x, y, z));
 
-                                    (int, int, int, int, int, int) dictionaryLengths = getDictionaryLengths(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
+                                    (Dictionary<(int, int), int> d1, Dictionary<(int, int), int> d2, Dictionary<(int, int), int> d3, Dictionary<(int, int), int> d4, Dictionary<(int, int), int> d5, Dictionary<(int, int), int> d6) dictionaries = getDictionaries(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
 
-                                    if (dictionaryLengths.Item1 > xMinDictionary.Count || dictionaryLengths.Item2 > xMaxDictionary.Count ||
-                                        dictionaryLengths.Item3 > yMinDictionary.Count || dictionaryLengths.Item4 > yMaxDictionary.Count ||
-                                        dictionaryLengths.Item5 > zMinDictionary.Count || dictionaryLengths.Item5 > zMaxDictionary.Count)
+                                    if (dictionaries.d1.Keys.Count == xMinDictionary.Keys.Count && dictionaries.d1.Keys.All(key => xMinDictionary.ContainsKey(key) && Equals(dictionaries.d1[key], xMinDictionary[key])) &&
+                                        dictionaries.d2.Keys.Count == xMaxDictionary.Keys.Count && dictionaries.d2.Keys.All(key => xMaxDictionary.ContainsKey(key) && Equals(dictionaries.d2[key], xMaxDictionary[key])) &&
+                                        dictionaries.d3.Keys.Count == yMinDictionary.Keys.Count && dictionaries.d3.Keys.All(key => yMinDictionary.ContainsKey(key) && Equals(dictionaries.d3[key], yMinDictionary[key])) &&
+                                        dictionaries.d4.Keys.Count == yMaxDictionary.Keys.Count && dictionaries.d4.Keys.All(key => yMaxDictionary.ContainsKey(key) && Equals(dictionaries.d4[key], yMaxDictionary[key])) &&
+                                        dictionaries.d5.Keys.Count == zMinDictionary.Keys.Count && dictionaries.d5.Keys.All(key => zMinDictionary.ContainsKey(key) && Equals(dictionaries.d5[key], zMinDictionary[key])) &&
+                                        dictionaries.d6.Keys.Count == zMaxDictionary.Keys.Count && dictionaries.d6.Keys.All(key => zMaxDictionary.ContainsKey(key) && Equals(dictionaries.d6[key], zMaxDictionary[key])))
+                                    {
+
+                                    }
+                                    else
                                     {
                                         hits++;
                                     }
@@ -295,11 +302,18 @@ namespace AdventOfCode_2022
                                 {
                                     cubeList.AddFirst((x, y, z));
 
-                                    (int, int, int, int, int, int) dictionaryLengths = getDictionaryLengths(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
+                                    (Dictionary<(int, int), int> d1, Dictionary<(int, int), int> d2, Dictionary<(int, int), int> d3, Dictionary<(int, int), int> d4, Dictionary<(int, int), int> d5, Dictionary<(int, int), int> d6) dictionaries = getDictionaries(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
 
-                                    if (dictionaryLengths.Item1 > xMinDictionary.Count || dictionaryLengths.Item2 > xMaxDictionary.Count ||
-                                        dictionaryLengths.Item3 > yMinDictionary.Count || dictionaryLengths.Item4 > yMaxDictionary.Count ||
-                                        dictionaryLengths.Item5 > zMinDictionary.Count || dictionaryLengths.Item5 > zMaxDictionary.Count)
+                                    if (dictionaries.d1.Keys.Count == xMinDictionary.Keys.Count && dictionaries.d1.Keys.All(key => xMinDictionary.ContainsKey(key) && Equals(dictionaries.d1[key], xMinDictionary[key])) &&
+                                        dictionaries.d2.Keys.Count == xMaxDictionary.Keys.Count && dictionaries.d2.Keys.All(key => xMaxDictionary.ContainsKey(key) && Equals(dictionaries.d2[key], xMaxDictionary[key])) &&
+                                        dictionaries.d3.Keys.Count == yMinDictionary.Keys.Count && dictionaries.d3.Keys.All(key => yMinDictionary.ContainsKey(key) && Equals(dictionaries.d3[key], yMinDictionary[key])) &&
+                                        dictionaries.d4.Keys.Count == yMaxDictionary.Keys.Count && dictionaries.d4.Keys.All(key => yMaxDictionary.ContainsKey(key) && Equals(dictionaries.d4[key], yMaxDictionary[key])) &&
+                                        dictionaries.d5.Keys.Count == zMinDictionary.Keys.Count && dictionaries.d5.Keys.All(key => zMinDictionary.ContainsKey(key) && Equals(dictionaries.d5[key], zMinDictionary[key])) &&
+                                        dictionaries.d6.Keys.Count == zMaxDictionary.Keys.Count && dictionaries.d6.Keys.All(key => zMaxDictionary.ContainsKey(key) && Equals(dictionaries.d6[key], zMaxDictionary[key])))
+                                    {
+
+                                    }
+                                    else
                                     {
                                         hits++;
                                     }
@@ -331,11 +345,18 @@ namespace AdventOfCode_2022
                                 {
                                     cubeList.AddFirst((x, y, z));
 
-                                    (int, int, int, int, int, int) dictionaryLengths = getDictionaryLengths(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
+                                    (Dictionary<(int, int), int> d1, Dictionary<(int, int), int> d2, Dictionary<(int, int), int> d3, Dictionary<(int, int), int> d4, Dictionary<(int, int), int> d5, Dictionary<(int, int), int> d6) dictionaries = getDictionaries(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
 
-                                    if (dictionaryLengths.Item1 > xMinDictionary.Count || dictionaryLengths.Item2 > xMaxDictionary.Count ||
-                                        dictionaryLengths.Item3 > yMinDictionary.Count || dictionaryLengths.Item4 > yMaxDictionary.Count ||
-                                        dictionaryLengths.Item5 > zMinDictionary.Count || dictionaryLengths.Item5 > zMaxDictionary.Count)
+                                    if (dictionaries.d1.Keys.Count == xMinDictionary.Keys.Count && dictionaries.d1.Keys.All(key => xMinDictionary.ContainsKey(key) && Equals(dictionaries.d1[key], xMinDictionary[key])) &&
+                                        dictionaries.d2.Keys.Count == xMaxDictionary.Keys.Count && dictionaries.d2.Keys.All(key => xMaxDictionary.ContainsKey(key) && Equals(dictionaries.d2[key], xMaxDictionary[key])) &&
+                                        dictionaries.d3.Keys.Count == yMinDictionary.Keys.Count && dictionaries.d3.Keys.All(key => yMinDictionary.ContainsKey(key) && Equals(dictionaries.d3[key], yMinDictionary[key])) &&
+                                        dictionaries.d4.Keys.Count == yMaxDictionary.Keys.Count && dictionaries.d4.Keys.All(key => yMaxDictionary.ContainsKey(key) && Equals(dictionaries.d4[key], yMaxDictionary[key])) &&
+                                        dictionaries.d5.Keys.Count == zMinDictionary.Keys.Count && dictionaries.d5.Keys.All(key => zMinDictionary.ContainsKey(key) && Equals(dictionaries.d5[key], zMinDictionary[key])) &&
+                                        dictionaries.d6.Keys.Count == zMaxDictionary.Keys.Count && dictionaries.d6.Keys.All(key => zMaxDictionary.ContainsKey(key) && Equals(dictionaries.d6[key], zMaxDictionary[key])))
+                                    {
+
+                                    }
+                                    else
                                     {
                                         hits++;
                                     }
@@ -347,11 +368,18 @@ namespace AdventOfCode_2022
                                 {
                                     cubeList.AddFirst((x, y, z));
 
-                                    (int, int, int, int, int, int) dictionaryLengths = getDictionaryLengths(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
+                                    (Dictionary<(int, int), int> d1, Dictionary<(int, int), int> d2, Dictionary<(int, int), int> d3, Dictionary<(int, int), int> d4, Dictionary<(int, int), int> d5, Dictionary<(int, int), int> d6) dictionaries = getDictionaries(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
 
-                                    if (dictionaryLengths.Item1 > xMinDictionary.Count || dictionaryLengths.Item2 > xMaxDictionary.Count ||
-                                        dictionaryLengths.Item3 > yMinDictionary.Count || dictionaryLengths.Item4 > yMaxDictionary.Count ||
-                                        dictionaryLengths.Item5 > zMinDictionary.Count || dictionaryLengths.Item5 > zMaxDictionary.Count)
+                                    if (dictionaries.d1.Keys.Count == xMinDictionary.Keys.Count && dictionaries.d1.Keys.All(key => xMinDictionary.ContainsKey(key) && Equals(dictionaries.d1[key], xMinDictionary[key])) &&
+                                        dictionaries.d2.Keys.Count == xMaxDictionary.Keys.Count && dictionaries.d2.Keys.All(key => xMaxDictionary.ContainsKey(key) && Equals(dictionaries.d2[key], xMaxDictionary[key])) &&
+                                        dictionaries.d3.Keys.Count == yMinDictionary.Keys.Count && dictionaries.d3.Keys.All(key => yMinDictionary.ContainsKey(key) && Equals(dictionaries.d3[key], yMinDictionary[key])) &&
+                                        dictionaries.d4.Keys.Count == yMaxDictionary.Keys.Count && dictionaries.d4.Keys.All(key => yMaxDictionary.ContainsKey(key) && Equals(dictionaries.d4[key], yMaxDictionary[key])) &&
+                                        dictionaries.d5.Keys.Count == zMinDictionary.Keys.Count && dictionaries.d5.Keys.All(key => zMinDictionary.ContainsKey(key) && Equals(dictionaries.d5[key], zMinDictionary[key])) &&
+                                        dictionaries.d6.Keys.Count == zMaxDictionary.Keys.Count && dictionaries.d6.Keys.All(key => zMaxDictionary.ContainsKey(key) && Equals(dictionaries.d6[key], zMaxDictionary[key])))
+                                    {
+
+                                    }
+                                    else
                                     {
                                         hits++;
                                     }
@@ -382,27 +410,39 @@ namespace AdventOfCode_2022
                                 {
                                     cubeList.AddFirst((x, y, z));
 
-                                    (int, int, int, int, int, int) dictionaryLengths = getDictionaryLengths(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
+                                    (Dictionary<(int, int), int> d1, Dictionary<(int, int), int> d2, Dictionary<(int, int), int> d3, Dictionary<(int, int), int> d4, Dictionary<(int, int), int> d5, Dictionary<(int, int), int> d6) dictionaries = getDictionaries(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
 
-                                    if (dictionaryLengths.Item1 > xMinDictionary.Count || dictionaryLengths.Item2 > xMaxDictionary.Count ||
-                                        dictionaryLengths.Item3 > yMinDictionary.Count || dictionaryLengths.Item4 > yMaxDictionary.Count ||
-                                        dictionaryLengths.Item5 > zMinDictionary.Count || dictionaryLengths.Item5 > zMaxDictionary.Count)
+                                    if (dictionaries.d1.Keys.Count == xMinDictionary.Keys.Count && dictionaries.d1.Keys.All(key => xMinDictionary.ContainsKey(key) && Equals(dictionaries.d1[key], xMinDictionary[key])) &&
+                                        dictionaries.d2.Keys.Count == xMaxDictionary.Keys.Count && dictionaries.d2.Keys.All(key => xMaxDictionary.ContainsKey(key) && Equals(dictionaries.d2[key], xMaxDictionary[key])) &&
+                                        dictionaries.d3.Keys.Count == yMinDictionary.Keys.Count && dictionaries.d3.Keys.All(key => yMinDictionary.ContainsKey(key) && Equals(dictionaries.d3[key], yMinDictionary[key])) &&
+                                        dictionaries.d4.Keys.Count == yMaxDictionary.Keys.Count && dictionaries.d4.Keys.All(key => yMaxDictionary.ContainsKey(key) && Equals(dictionaries.d4[key], yMaxDictionary[key])) &&
+                                        dictionaries.d5.Keys.Count == zMinDictionary.Keys.Count && dictionaries.d5.Keys.All(key => zMinDictionary.ContainsKey(key) && Equals(dictionaries.d5[key], zMinDictionary[key])) &&
+                                        dictionaries.d6.Keys.Count == zMaxDictionary.Keys.Count && dictionaries.d6.Keys.All(key => zMaxDictionary.ContainsKey(key) && Equals(dictionaries.d6[key], zMaxDictionary[key])))
+                                    {
+
+                                    }
+                                    else
                                     {
                                         hits++;
                                     }
-
-                                    cubeList.RemoveFirst();
                                 }
 
                                 if (cubeList.Contains((x + 1, y, z)))
                                 {
                                     cubeList.AddFirst((x, y, z));
 
-                                    (int, int, int, int, int, int) dictionaryLengths = getDictionaryLengths(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
+                                    (Dictionary<(int, int), int> d1, Dictionary<(int, int), int> d2, Dictionary<(int, int), int> d3, Dictionary<(int, int), int> d4, Dictionary<(int, int), int> d5, Dictionary<(int, int), int> d6) dictionaries = getDictionaries(cubeList, xmin, xmax, ymin, ymax, zmin, zmax);
 
-                                    if (dictionaryLengths.Item1 > xMinDictionary.Count || dictionaryLengths.Item2 > xMaxDictionary.Count ||
-                                        dictionaryLengths.Item3 > yMinDictionary.Count || dictionaryLengths.Item4 > yMaxDictionary.Count ||
-                                        dictionaryLengths.Item5 > zMinDictionary.Count || dictionaryLengths.Item5 > zMaxDictionary.Count)
+                                    if (dictionaries.d1.Keys.Count == xMinDictionary.Keys.Count && dictionaries.d1.Keys.All(key => xMinDictionary.ContainsKey(key) && Equals(dictionaries.d1[key], xMinDictionary[key])) &&
+                                        dictionaries.d2.Keys.Count == xMaxDictionary.Keys.Count && dictionaries.d2.Keys.All(key => xMaxDictionary.ContainsKey(key) && Equals(dictionaries.d2[key], xMaxDictionary[key])) &&
+                                        dictionaries.d3.Keys.Count == yMinDictionary.Keys.Count && dictionaries.d3.Keys.All(key => yMinDictionary.ContainsKey(key) && Equals(dictionaries.d3[key], yMinDictionary[key])) &&
+                                        dictionaries.d4.Keys.Count == yMaxDictionary.Keys.Count && dictionaries.d4.Keys.All(key => yMaxDictionary.ContainsKey(key) && Equals(dictionaries.d4[key], yMaxDictionary[key])) &&
+                                        dictionaries.d5.Keys.Count == zMinDictionary.Keys.Count && dictionaries.d5.Keys.All(key => zMinDictionary.ContainsKey(key) && Equals(dictionaries.d5[key], zMinDictionary[key])) &&
+                                        dictionaries.d6.Keys.Count == zMaxDictionary.Keys.Count && dictionaries.d6.Keys.All(key => zMaxDictionary.ContainsKey(key) && Equals(dictionaries.d6[key], zMaxDictionary[key])))
+                                    {
+
+                                    }
+                                    else
                                     {
                                         hits++;
                                     }
@@ -421,8 +461,11 @@ namespace AdventOfCode_2022
         }
 
 
-        public static (int, int, int, int, int, int) getDictionaryLengths(LinkedList<(int, int, int)> data, int xmin, int xmax, int ymin, int ymax, int zmin, int zmax)
+        public static (Dictionary<(int, int), int>, Dictionary<(int, int), int>, Dictionary<(int, int), int>, Dictionary<(int, int), int>, Dictionary<(int, int), int>, Dictionary<(int, int), int>) getDictionaries(LinkedList<(int, int, int)> data, int xmin, int xmax, int ymin, int ymax, int zmin, int zmax)
         {
+
+
+            /*
             int xMinSize = 0;
             int xMaxSize = 0;
             int yMinSize = 0;
@@ -430,13 +473,20 @@ namespace AdventOfCode_2022
             int zMinSize = 0;
             int zMaxSize = 0;
 
-            /*xmin = -10;
+            xmin = -10;
             xmax = 50;
             ymin = -10;
             ymax = 50;
             zmin = -10;
             zmax = 50;*/
 
+
+            Dictionary<(int, int), int> zMinDictionary = new Dictionary<(int, int), int>();
+            Dictionary<(int, int), int> zMaxDictionary = new Dictionary<(int, int), int>();
+            Dictionary<(int, int), int> xMinDictionary = new Dictionary<(int, int), int>();
+            Dictionary<(int, int), int> xMaxDictionary = new Dictionary<(int, int), int>();
+            Dictionary<(int, int), int> yMinDictionary = new Dictionary<(int, int), int>();
+            Dictionary<(int, int), int> yMaxDictionary = new Dictionary<(int, int), int>();
 
             // z positive direction
             for (int x = xmin; x < xmax; x++)
@@ -448,7 +498,7 @@ namespace AdventOfCode_2022
                         if (data.Contains((x, y, z)))
                         {
                             //Console.WriteLine("z+");
-                            zMinSize++;
+                            zMinDictionary.Add((x, y), z);
                             break;
                         }
                     }
@@ -465,7 +515,7 @@ namespace AdventOfCode_2022
                         if (data.Contains((x, y, z)))
                         {
                             //Console.WriteLine("z-");
-                            zMaxSize++;
+                            zMaxDictionary.Add((x, y), z);
                             break;
                         }
                     }
@@ -482,7 +532,7 @@ namespace AdventOfCode_2022
                         if (data.Contains((x, y, z)))
                         {
                             //Console.WriteLine("x+");
-                            xMinSize++;
+                            xMinDictionary.Add((y, z), x);
                             break;
                         }
                     }
@@ -499,7 +549,7 @@ namespace AdventOfCode_2022
                         if (data.Contains((x, y, z)))
                         {
                             //Console.WriteLine("x-");
-                            xMaxSize++;
+                            xMaxDictionary.Add((y, z), x);
                             break;
                         }
                     }
@@ -516,7 +566,7 @@ namespace AdventOfCode_2022
                         if (data.Contains((x, y, z)))
                         {
                             //Console.WriteLine("y+");
-                            yMinSize++;
+                            yMinDictionary.Add((x, z), y);
                             break;
                         }
                     }
@@ -533,14 +583,14 @@ namespace AdventOfCode_2022
                         if (data.Contains((x, y, z)))
                         {
                             //Console.WriteLine("y-");
-                            yMaxSize++;
+                            yMaxDictionary.Add((x, z), y);
                             break;
                         }
                     }
                 }
             }
 
-            return (xMinSize, xMaxSize, yMinSize, yMaxSize, zMinSize, zMaxSize);
+            return (xMinDictionary, xMaxDictionary, yMinDictionary, yMaxDictionary, zMinDictionary, zMaxDictionary);
         }
     }
 }
