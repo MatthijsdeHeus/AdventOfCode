@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="2022\18.cs" />
     <Compile Include="2022\10.cs" />
     <Compile Include="2022\11.cs" />
     <Compile Include="2022\17.cs" />
@@ -56,7 +57,9 @@
     <Compile Include="2022\13.cs" />
     <Compile Include="2022\7.cs" />
     <Compile Include="2022\8.cs" />
+    <Content Include="2022\Input\18.txt" />
     <Content Include="2022\Input\17.txt" />
+    <Content Include="2022\Input\18_test.txt" />
     <Content Include="2022\Input\17_test.txt" />
     <Content Include="2022\Input\16.txt" />
     <Content Include="2022\Input\15.txt" />
